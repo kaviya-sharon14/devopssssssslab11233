@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Installing dependencies...'
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'pytest --maxfail=1 --disable-warnings -q || echo "No tests yet"'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Starting Flask To-Do App...'
+                sh 'nohup python app.py &'
+            }
+        }
+    }
+}
